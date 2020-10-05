@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { useElementCallback } from 'use-element'
-
 const { ResizeObserver } = window
 
 const getElementPosition = elem => {
@@ -113,14 +111,13 @@ const observeRect = observeDOM(
   },
 )
 
-const useElementPositionALaMano = callback =>
-  useElementCallback(elem => observeRect(elem, callback))
+const useElementPositionALaMano = callback => elem => observeRect(elem, callback)
 
 export const useElementPositionCallback = useElementPositionALaMano
 
 export const useElementPosition = defaultValue => {
   const [rect, setRect] = useState(defaultValue)
-  const ref = useElementPositionCallback(setRect)
+  const ref = elem => observeRect(elem, setRect)
   return [ref, rect]
 }
 
